@@ -1,0 +1,9 @@
+=LAMBDA(num,LET(x,ABS(num),wd,TEXT(INT(x),REPT("0",15)),dec,ROUND(x-INT(x),2)*100,c,CHOOSECOLS,
+dgtλ,{"One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"},
+tenλ,{"Ten","Twenty","Thirty","Fourty","Fifty","Sixty","Seventy","Eighty","Ninety"},
+SPELL,LAMBDA(val,z,IFERROR(IF(val<20,c(dgtλ,val)&" "&z&" ",c(tenλ,LEFT(val,1))&IFERROR(" "&c(dgtλ,RIGHT(val,1)),"")&" "&z&" "),"")),
+SPELL3,LAMBDA(vl,abb,IF(vl>99,SPELL(--LEFT(vl,1),"Hundred")&IF(--RIGHT(vl,2)=0,abb,SPELL(--RIGHT(vl,2), abb)),SPELL(vl,abb))),
+dlr,CONCAT(MAP(--MID(wd,{1,4,7,10,13,14},{3,3,3,3,1,2}),{"Trillion","Billion","Million","Thousand","Hundred",""},
+IF({1,1,1,1,0,0},SPELL3,SPELL),LAMBDA(v,a,fn,fn(v,a))),IF(x>1," Dollars",IF(x=1," Dollar",""))),
+Cnt,SPELL(dec," Cent"&IF(dec>1,"s","")&" Only."),
+TRIM(IF(AND(--wd>0,dec>0),dlr&" And "&Cnt,IF(dlr="",Cnt,dlr&" Only.")))))(B2)
