@@ -1,0 +1,16 @@
+=LAMBDA(number,
+    LET(num, ABS(number),int, INT(num),
+        dec, ROUND(num - int, 2) * 100,
+        oneλ, LAMBDA(x, CHOOSE(x + 1, "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+            "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen")),
+        tenλ, LAMBDA(x, CHOOSE(QUOTIENT(x, 10), "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety")),
+        strλ, LAMBDA(x, IF(x < 20, oneλ(x), TEXTJOIN(" ", 1, tenλ(x), oneλ(MOD(x, 10))))),
+        dolλ, LAMBDA(x, FILTER(HSTACK(IF(x, MAP(x, strλ) & {" Hundred",""}, ""), {"Trillion";"Billion";"Million";"Thousand";""}), BYROW(x, OR))),
+        TEXTJOIN(" ", 1,
+            SWITCH(SIGN(number), -1, "Negative", ""),
+            IF(int, dolλ(--MID(TEXT(int, REPT(0, 15)), TAKE(SEQUENCE(5, 3),, 2), {1,2})), ""),
+            IF(int=1, "Dollar", IF(int>1,"Dollars","")),
+            IF(AND(int>0,dec>0),"And",IF(int>0,"Only.","")),
+            IF(dec, strλ(dec), ""),
+            IF(dec>0,"Cent"&IF(dec=1,"","s")&" Only.","")
+)))(B2)
